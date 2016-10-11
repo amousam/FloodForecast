@@ -1,4 +1,6 @@
 # FloodForecast
+[![Binder](http://mybinder.org/badge.svg)](http://mybinder.org:/repo/gmu-ferreiraresearchgroup/floodforecast)
+
 Near Real-time Flood Forecasting for the George Mason University Campus
 
 Contents: 
