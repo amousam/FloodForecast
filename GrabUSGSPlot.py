@@ -45,27 +45,26 @@ last     =  datetime.date(stop).strftime('%Y-%m-%d')
 
 
 # In[ ]:
-
-# Ping the USGS API for data
-try:
-    params = OrderedDict([('format',dformat),('sites',gage),('startDT',first), 
-                ('endDT',last), ('parameterCD',parameter[0])])  
-    
+def GrabData(gage,params):
     r = requests.get(url, params = params) 
     print("\nRetrieved Data for USGS Gage: ", gage)
     data = r.content.decode()
     d = json.loads(data)
     mydict = dict(d['value']['timeSeries'][0])
+    return d, mydict
+
+# Ping the USGS API for data
+
+try:
+    params = OrderedDict([('format',dformat),('sites',gage),('startDT',first), 
+                ('endDT',last), ('parameterCD',parameter[0])])  
+    d, mydict = GrabData(gage,params)
     
 except:
     params = OrderedDict([('format',dformat),('sites',gage),('startDT',first), 
                 ('endDT',last), ('parameterCD',parameter[1])])  
-    
-    r = requests.get(url, params = params) 
-    print("\nRetrieved Data for USGS Gage: ", gage)
-    data = r.content.decode()
-    d = json.loads(data)
-    mydict = dict(d['value']['timeSeries'][0])
+    d, mydict = GrabData(gage,params)
+
 
 if params['parameterCD'] == '00060':
     obser = "StreamFlow"
@@ -113,5 +112,4 @@ print("\nBottom Rows: \n", df.tail())
 
 # Plot the Results, and use the SiteName as a title!
 df.plot(grid = True, title = SiteName)
-
 
